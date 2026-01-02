@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voice-quality-evaluator
+  labels:
+    app: voice-quality-evaluator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: voice-quality-evaluator
+  template:
+    metadata:
+      labels:
+        app: voice-quality-evaluator
+    spec:
+      serviceAccountName: voice-quality-sa  # IT team will provide this (IRSA)
+      containers:
+      - name: streamlit-app
+        image: ${ECR_REPOSITORY_URI}:latest  # Replace with actual ECR URI
+        ports:
+        - containerPort: 8501
+        envFrom:
+        - configMapRef:
+            name: voice-quality-config
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /_stcore/health
+            port: 8501
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /_stcore/health
+            port: 8501
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
