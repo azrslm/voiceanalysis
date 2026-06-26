@@ -1,0 +1,51 @@
+# Docker ignore file
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Kubernetes manifests (not needed in container)
+k8s/
+
+# Documentation
+*.md
+!requirements.txt
+
+# Environment files (secrets should come from K8s)
+.env
+.env.*
+
+# Test files
+tests/
+test_*.py
+*_test.py
